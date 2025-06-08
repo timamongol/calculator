@@ -10,10 +10,10 @@
 
 ## Сборка проекта:
 
-mkdir build
-cd build
-cmake .. -DCMAKE_BUILD_TYPE=Release
-cmake --build . --config Release
+- mkdir build
+- cd build
+- cmake .. -DCMAKE_BUILD_TYPE=Release
+- cmake --build . --config Release
 
 # Инструкции:
 
@@ -23,8 +23,8 @@ cmake --build . --config Release
 
 ### Добавить распознование идентификатора в lexer.cpp
 
-В функции tokenizeIdentifier() необходимо добавить в условный оператор требуемое действие
+- В функции tokenizeIdentifier() необходимо добавить в условный оператор требуемое действие
 
-### Обновить парсер
+- Обновить парсер
 
-### Добавить реализацию действия в processFunction() в evaluator.cpp
+- Добавить реализацию действия в processFunction() в evaluator.cpp

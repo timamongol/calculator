@@ -72,7 +72,11 @@ TEST_CASE("Parser RPN conversion", "[parser]") {
         for (const auto& token : rpn) {
             if (!result.empty()) result += " ";
             if (token.type == TokenType::Number) {
-                result += std::to_string(token.value);
+                if (std::floor(token.value) == token.value) {
+                    result += std::to_string(static_cast<int>(token.value));
+                } else { 
+                    result += std::to_string(token.value);
+                }
             } else {
                 result += token.lexeme;
             }
