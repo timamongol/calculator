@@ -49,7 +49,7 @@ void Lexer::tokenizeIdentifier() {
         tokens_.push_back(Token(TokenType::Constant, lexeme));
     } 
     // Проверка функций
-    else if (lexeme == "sin" || lexeme == "cos" || lexeme == "!") {
+    else if (lexeme == "sin" || lexeme == "cos") {
         tokens_.push_back(Token(TokenType::Function, lexeme));
     }
     // Переменные
@@ -60,7 +60,11 @@ void Lexer::tokenizeIdentifier() {
 
 void Lexer::tokenizeOperator() {
     char op = (*input_)[pos_++];
-    tokens_.push_back(Token(TokenType::Operator, op));
+    if (op == '!') {
+        tokens_.push_back(Token(TokenType::Function, "!"));
+    } else {
+        tokens_.push_back(Token(TokenType::Operator, op));
+    }
 }
 
 void Lexer::tokenizeBracket() {
@@ -90,7 +94,7 @@ std::vector<Token> Lexer::tokenize(const std::string& input) {
         else if (std::isalpha(c) || c == '_') {
             tokenizeIdentifier();
         }
-        else if (c == '+' || c == '-' || c == '*' || c == '/' || c == '^') {
+        else if (c == '+' || c == '-' || c == '*' || c == '/' || c == '^' || c == '!') {
             tokenizeOperator();
         }
         else if (c == '(' || c == '[' || c == '{' || 

@@ -31,8 +31,8 @@ TEST_CASE("Lexer tokenization", "[lexer]") {
     }
     
     SECTION("Functions and constants") {
-        auto tokens = lexer.tokenize("sin cos PI x");
-        REQUIRE(tokens.size() == 4);
+        auto tokens = lexer.tokenize("sin cos PI x !");
+        REQUIRE(tokens.size() == 5);
         CHECK(tokens[0].type == TokenType::Function);
         CHECK(tokens[0].lexeme == "sin");
         CHECK(tokens[1].type == TokenType::Function);
@@ -41,6 +41,8 @@ TEST_CASE("Lexer tokenization", "[lexer]") {
         CHECK(tokens[2].lexeme == "PI");
         CHECK(tokens[3].type == TokenType::Variable);
         CHECK(tokens[3].lexeme == "x");
+        CHECK(tokens[4].type == TokenType::Function);
+        CHECK(tokens[4].lexeme == "!");
     }
     
     SECTION("Brackets") {
@@ -94,6 +96,7 @@ TEST_CASE("Parser RPN conversion", "[parser]") {
         CHECK(toRPNString("sin(0)") == "0 sin");
         CHECK(toRPNString("cos(PI)") == "PI cos");
         CHECK(toRPNString("2 * sin(PI/2)") == "2 PI 2 / sin *");
+        // CHECK(toRPNString("2!") == "2 !");
     }
     
     SECTION("Exponentiation") {
@@ -140,6 +143,7 @@ TEST_CASE("Evaluator computation", "[evaluator]") {
         CHECK(evalExpr("sin(0)") == 0);
         CHECK(evalExpr("cos(0)") == 1);
         CHECK(evalExpr("sin(PI/2)") == Approx(1).margin(1e-5));
+        CHECK(evalExpr("5!") == 120);
     }
     
     SECTION("Variables") {
@@ -158,6 +162,14 @@ TEST_CASE("Evaluator computation", "[evaluator]") {
     SECTION("Error handling") {
         SECTION("Division by zero") {
             REQUIRE_THROWS_AS(evalExpr("1 / 0"), MathError);
+        }
+
+        SECTION("Factorial negative") {
+            REQUIRE_THROWS_AS(evalExpr("-1!"), MathError);
+        }
+        
+        SECTION("Factorial non-integer") {
+            REQUIRE_THROWS_AS(evalExpr("3.5!"), MathError);
         }
         
         SECTION("Undefined variable") {

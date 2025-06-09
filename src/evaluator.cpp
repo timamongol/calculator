@@ -54,6 +54,7 @@ void Evaluator::processFunction(const Token& token) {
         for (int i = 2; i <= static_cast<int>(arg); ++i) {
             fact *= i;
         }
+
         result = static_cast<double>(fact);
     }
     else {

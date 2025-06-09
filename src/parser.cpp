@@ -5,10 +5,10 @@
 
 int Parser::getPrecedence(const Token& token) {
     static const std::map<std::string, int> precedence = {
-        {"!", 5}, {"^", 4},
+        {"!", 5}, {"sin", 5}, {"cos", 5},
+        {"^", 4},
         {"*", 3}, {"/", 3},
         {"+", 2}, {"-", 2},
-        {"sin", 5}, {"cos", 5}
     };
     
     if (token.type == TokenType::Function) {
