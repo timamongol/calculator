@@ -57,6 +57,9 @@ void Evaluator::processFunction(const Token& token) {
 
         result = static_cast<double>(fact);
     }
+    else if (token.lexeme == "unary_minus") {
+        result = -arg;
+    }
     else {
         throw RuntimeError("Unknown function: " + token.lexeme);
     }

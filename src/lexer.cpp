@@ -60,9 +60,19 @@ void Lexer::tokenizeIdentifier() {
 
 void Lexer::tokenizeOperator() {
     char op = (*input_)[pos_++];
-    if (op == '!') {
+    // Обработка унарного минуса
+    if (op == '-' && (tokens_.empty() || 
+        tokens_.back().type == TokenType::Operator ||
+        tokens_.back().type == TokenType::LeftBracket ||
+        tokens_.back().type == TokenType::Function)) {
+        tokens_.push_back(Token(TokenType::Function, "unary_minus"));
+    }
+    // Обработка факториала
+    else if (op == '!') {
         tokens_.push_back(Token(TokenType::Function, "!"));
-    } else {
+    }
+    // Бинарные операторы
+    else {
         tokens_.push_back(Token(TokenType::Operator, op));
     }
 }

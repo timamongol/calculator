@@ -5,6 +5,7 @@
 
 int Parser::getPrecedence(const Token& token) {
     static const std::map<std::string, int> precedence = {
+        {"unary_minus", 6},
         {"!", 5}, {"sin", 5}, {"cos", 5},
         {"^", 4},
         {"*", 3}, {"/", 3},

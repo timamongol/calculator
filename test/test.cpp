@@ -24,7 +24,7 @@ TEST_CASE("Lexer tokenization", "[lexer]") {
         auto tokens = lexer.tokenize("+ - * / ^");
         REQUIRE(tokens.size() == 5);
         CHECK(tokens[0].lexeme == "+");
-        CHECK(tokens[1].lexeme == "-");
+        CHECK(tokens[1].lexeme == "unary_minus");
         CHECK(tokens[2].lexeme == "*");
         CHECK(tokens[3].lexeme == "/");
         CHECK(tokens[4].lexeme == "^");
@@ -165,7 +165,7 @@ TEST_CASE("Evaluator computation", "[evaluator]") {
         }
 
         SECTION("Factorial negative") {
-            REQUIRE_THROWS_AS(evalExpr("-1!"), MathError);
+            REQUIRE_THROWS_AS(evalExpr("(-1)!"), MathError);
         }
         
         SECTION("Factorial non-integer") {
@@ -179,6 +179,42 @@ TEST_CASE("Evaluator computation", "[evaluator]") {
         SECTION("Mismatched brackets") {
             REQUIRE_THROWS_AS(evalExpr("(2 + 3"), SyntaxError);
         }
+    }
+}
+
+TEST_CASE("Negative numbers", "[evaluator]") {
+    Lexer lexer;
+    Parser parser;
+    Evaluator eval;
+
+    auto evalExpr = [&](const std::string& expr, 
+                        const std::map<std::string, double>& vars = {}) -> double {
+        for (const auto& [name, value] : vars) {
+            eval.setVariable(name, value);
+        }
+        auto tokens = lexer.tokenize(expr);
+        auto rpn = parser.parseToRPN(tokens);
+        return eval.evaluateRPN(rpn);
+    };
+
+    SECTION("Basic negatives") {
+        CHECK(evalExpr("-5") == -5);
+        CHECK(evalExpr("-5 + 3") == -2);
+        CHECK(evalExpr("3 + -5") == -2);
+        CHECK(evalExpr("2 * -3") == -6);
+    }
+    
+    SECTION("Complex expressions") {
+        CHECK(evalExpr("2 ^ -2") == 0.25);
+        CHECK(evalExpr("sin(-PI/2)") == -1);
+        CHECK(evalExpr("-3!") == -6);
+        CHECK(evalExpr("(-5) ^ 2") == 25);
+    }
+    
+    SECTION("Multiple unary") {
+        CHECK(evalExpr("--5") == 5);
+        CHECK(evalExpr("---5") == -5);
+        CHECK(evalExpr("-(3 + 2)") == -5);
     }
 }
 
