@@ -1,5 +1,5 @@
-#include "parser.h"
-#include "error.h"
+#include "../include/parser.h"
+#include "../include/error.h"
 #include <map>
 #include <cctype>
 

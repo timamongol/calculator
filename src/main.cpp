@@ -1,8 +1,5 @@
 #include <iostream>
-#include "lexer.h"
-#include "parser.h"
-#include "evaluator.h"
-#include "error.h"
+#include <calculator_lib.h>
 #include <CLI/CLI.hpp>
 
 int main(int argc, char** argv) {

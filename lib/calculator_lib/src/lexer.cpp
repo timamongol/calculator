@@ -1,5 +1,5 @@
-#include "lexer.h"
-#include "error.h"
+#include "../include/lexer.h"
+#include "../include/error.h"
 #include <cctype>
 #include <cmath>
 #include <map>

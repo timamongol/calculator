@@ -1,9 +1,6 @@
 #define CATCH_CONFIG_MAIN
 #include <catch2/catch_all.hpp>
-#include "lexer.h"
-#include "parser.h"
-#include "evaluator.h"
-#include "error.h"
+#include <calculator_lib.h>
 #include <cmath>
 
 using Catch::Approx;

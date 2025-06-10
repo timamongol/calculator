@@ -1,5 +1,5 @@
-#include "evaluator.h"
-#include "error.h"
+#include "../include/evaluator.h"
+#include "../include/error.h"
 #include <cmath>
 #include <iostream>
 

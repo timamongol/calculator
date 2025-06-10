@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.10)
-project(Calculator)
+project(calculator)
 
 set(CMAKE_CXX_STANDARD 17)
 
@@ -13,21 +13,37 @@ if(WIN32)
     add_definitions(-D_USE_MATH_DEFINES)
 endif()
 
-include_directories(include)
+#Добавляю библиотеку динамическую
+#__________________________________________
+add_library(${PROJECT_NAME}_lib SHARED
+    lib/calculator_lib/src/lexer.cpp
+    lib/calculator_lib/src/parser.cpp
+    lib/calculator_lib/src/evaluator.cpp
+)
+
+add_library(${PROJECT_NAME}_lib::calculator_lib ALIAS ${PROJECT_NAME}_lib)
+
+target_include_directories(${PROJECT_NAME}_lib
+    PUBLIC
+        lib/calculator_lib/include
+)
+#__________________________________________
 
 add_executable(calculator
-    src/lexer.cpp
-    src/parser.cpp
-    src/evaluator.cpp
     src/main.cpp
 )
 
-target_link_libraries(calculator PRIVATE CLI11::CLI11)
+target_link_libraries(calculator 
+    PRIVATE 
+        CLI11::CLI11
+        ${PROJECT_NAME}_lib::calculator_lib
+)
 
 add_executable(test
     test/test.cpp
-    src/lexer.cpp
-    src/parser.cpp
-    src/evaluator.cpp
 )
-target_link_libraries(test PRIVATE Catch2::Catch2WithMain)
+target_link_libraries(test 
+    PRIVATE 
+        Catch2::Catch2WithMain
+        ${PROJECT_NAME}_lib::calculator_lib
+)
